@@ -1,3 +1,3 @@
-module github.com/egirna/icap
+module github.com/NGRsoftlab/icap
 
 go 1.17

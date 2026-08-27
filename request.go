@@ -145,11 +145,11 @@ func ReadRequest(b *bufio.ReadWriter) (req *Request, err error) {
 	if hasBody {
 		if p := req.Header.Get("Preview"); p != "" {
 			moreBody := false
-			
-			if previewSize, err := strconv.Atoi(p); err != nil && previewSize > 0 {
+
+			if previewSize, err := strconv.Atoi(p); err == nil && previewSize > 0 {
 				moreBody = true
 			}
-			
+
 			req.Preview, err = ioutil.ReadAll(newChunkedReader(b))
 			if err != nil {
 				if strings.Contains(err.Error(), "ieof") {
@@ -175,7 +175,7 @@ func ReadRequest(b *bufio.ReadWriter) (req *Request, err error) {
 		invalidURLEscapeFixed := false
 		req.Request, err = http.ReadRequest(bufio.NewReader(bytes.NewBuffer(rawReqHdr)))
 		if err != nil && strings.Contains(err.Error(), "invalid URL escape") {
-			//Fix the request url
+			// Fix the request url
 			// Convert the rawReqHdr to string
 			// find the url\path start and end(sould be in the status line
 			// convert the percents into %25
